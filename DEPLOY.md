@@ -1,7 +1,7 @@
 # 🚀 FinLife — Deploy em servidor externo (estilo XAMPP: cPanel, Hostinger, etc.)
 
 Guia rápido para qualquer hospedagem com **Apache + MySQL + PHP 8.1+**.
-O projeto já está pronto: `.htaccess` configurado, `database.sql` completo (28 tabelas) e `.env` externo.
+O projeto já está pronto: `.htaccess` configurado, `database.sql` completo (31 tabelas) e `.env` externo.
 
 ---
 
@@ -29,7 +29,7 @@ O projeto já está pronto: `.htaccess` configurado, `database.sql` completo (28
 
 1. Painel → **phpMyAdmin** → selecione o banco criado na lateral esquerda
 2. Aba **Import** → **Choose File** → `database.sql` (da raiz do projeto)
-3. **Import** → aguarde (segundos) → as 28 tabelas aparecem
+3. **Import** → aguarde (segundos) → as 31 tabelas aparecem
 
 > ✅ O `database.sql` já inclui cartões, mercados, portfólio e IA — **não precisa rodar migrations**.
 

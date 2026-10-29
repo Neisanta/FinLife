@@ -1,115 +1,200 @@
-# FinLife
+<div align="center">
+  <h1>FinLife</h1>
+  <p><strong>Organização de finanças pessoais em PHP, MySQL e JavaScript.</strong></p>
+  <p>
+    <a href="https://finlife.spssolar.com.br/login"><strong>▶ Ver demonstração</strong></a>
+    ·
+    <a href="#funcionalidades"><strong>Funcionalidades</strong></a>
+    ·
+    <a href="#como-executar"><strong>Executar localmente</strong></a>
+  </p>
+</div>
 
-Assistente financeiro pessoal em PHP + MySQL. Controle de receitas, despesas,
-contas, metas e um assistente de IA que analisa seus dados reais — sem inventar nada.
+---
 
-## Requisitos
+FinLife é uma aplicação web para registrar receitas e despesas, acompanhar contas, categorias, metas, cartões e compromissos e visualizar indicadores financeiros. O frontend consome endpoints HTTP/JSON separados por responsabilidade, enquanto a persistência e as regras de negócio ficam em PHP e MySQL.
 
-- XAMPP (PHP 8.1+ com `pdo_mysql`, `curl`, `mbstring`) — MySQL ativo na porta 3306
-- Nenhuma dependência externa de frontend (vanilla JS + SVG)
+> **Status:** projeto em evolução. A demonstração pública permite criar uma conta de teste. O módulo de mercado consulta APIs públicas de terceiros e informa provedor, horário e situação do cache; não representa conexão com Open Finance ou com o sistema bancário do usuário.
 
-## Instalação
+## Demonstração
 
-1. Copie a pasta do projeto para `C:\xampp\htdocs\FinLife`.
-2. Garanta o MySQL ativo no painel do XAMPP.
-3. Crie a configuração local a partir do modelo:
+- **Aplicação:** <https://finlife.spssolar.com.br/login>
+- **Cadastro local:** disponível em `/cadastro`
 
-   ```
-   copy .env.example .env
-   ```
+A demonstração é a tela de entrada da aplicação. Para avaliar as áreas protegidas, crie uma conta local ou de teste; não versione dados pessoais.
 
-   Preencha `DB_NAME`, `DB_USER` e `DB_PASS` com os dados do seu MySQL.
-   O arquivo `.env` **nunca** é versionado — ele guarda a chave da IA e as
-   credenciais do banco.
+<div align="center">
+  <img src="docs/finlife-login.png" alt="Captura real da tela de login do FinLife" width="720">
+</div>
 
-4. Crie o banco e as tabelas (idempotente):
+## Funcionalidades verificadas no código
 
-   ```
-   C:\xampp\php\php.exe scripts\install.php
-   ```
+### Gestão financeira
 
-   O schema também está em `database.sql` (só estrutura, sem dados).
+- cadastro, login, logout e sessão autenticada;
+- receitas e despesas vinculadas a contas e categorias;
+- contas com saldo inicial, tipos e associação opcional de instituição;
+- categorias padrão e personalizáveis por usuário;
+- metas com valor-alvo, prazo, status e aportes;
+- dashboard com saldo, receitas, despesas, taxa de poupança, orçamento mensal, evolução e categorias;
+- orçamento mensal e indicadores de uso.
 
-5. (Opcional) Configure a IA em `.env` — `AI_API_KEY`, `AI_API_URL` e `AI_MODEL`
-   (compatível com OpenAI, DeepSeek, Groq, OpenRouter...). Sem chave, o
-   assistente opera em **modo local**: regras + dados reais do banco.
+### Cartões e compromissos
 
-## Uso
+- cartões de crédito, débito, benefício e múltiplo, com limite, vencimento e conta associada;
+- compras, faturas, parcelamentos, pagamentos e compras recorrentes;
+- linha do tempo e regras de lançamento para crédito, débito e benefícios;
+- compromissos e contas fixas, ocorrências e pagamentos;
+- alertas de limite e visão consolidada de vencimentos.
 
-- **Via XAMPP/Apache:** <http://localhost/FinLife/>
-- **Via servidor embutido (desenvolvimento):**
+### Mercados e portfólio
 
-  ```
-  C:\xampp\php\php.exe -S 127.0.0.1:8090 -t public router.php
-  ```
+- visão geral de índices, câmbio e cripto;
+- cotações, histórico, busca, maiores altas/quedas, notícias, watchlist e alertas;
+- provedores públicos com fallback e cache por classe de ativo;
+- identificação de dado fresco ou antigo (`is_stale`), fonte e horário;
+- carteira de investimentos, ativos, passivos, dividendos e transações de portfólio.
 
-  e acesse <http://127.0.0.1:8090/>
+### Assistente FinLife AI
 
-Crie sua conta em **/cadastro** — o sistema já semeia 16 categorias padrão
-e uma carteira de dinheiro. Depois use as páginas **Transações**, **Contas**,
-**Categorias**, **Metas** e **FinLife AI**.
+- interpretador local de linguagem e confirmação antes de ações que alteram dados;
+- integração opcional com API compatível com `chat/completions` (OpenAI, DeepSeek, Groq ou OpenRouter);
+- contexto construído a partir dos dados reais do usuário no banco;
+- histórico de conversa e confirmação explícita para criar transações ou metas.
 
-### Exemplos de comandos para a IA
+## Tecnologias utilizadas
 
-- "Gastei R$ 35 no Uber."
-- "Quanto gastei esse mês?"
-- "Onde estou gastando mais?"
-- "Quanto preciso guardar para atingir minha meta?"
-- "Crie uma meta para comprar uma moto de 15 mil"
+| Tecnologia | Função no projeto |
+|---|---|
+| **PHP 8.1+** | rotas, controllers, regras de negócio e APIs HTTP/JSON |
+| **MySQL / MariaDB** | persistência relacional, isolamento por usuário e cache de market data |
+| **PDO** | conexão e prepared statements |
+| **JavaScript** | consumo assíncrono das APIs, formulários, gráficos e interações |
+| **HTML5 / CSS3** | interfaces responsivas com tema escuro |
+| **SVG e Canvas** | gráficos próprios do dashboard e do módulo de mercados, sem biblioteca externa |
+| **Apache ou servidor embutido do PHP** | execução local e em hospedagem |
+| **Git / GitHub** | versionamento e organização do código |
 
-Ações da IA (criar transação/meta) são sempre **confirmadas** antes de
-executar, passam pelas regras de negócio (models) e **nunca executam SQL**.
+## Arquitetura e organização
 
-## Segurança
-
-- Senhas com `password_hash()` (bcrypt) + rehash automático
-- Sessões HttpOnly/SameSite, regeneração de ID no login, fingerprint de UA
-- Proteção de páginas (redirect) e de API (401 JSON)
-- CSRF em todas as operações que alteram estado
-- Prepared statements em 100% das queries (sem SQL injection)
-- Saída HTML escapada no servidor (`e()`) e no frontend (`FL.esc()`)
-- Rate limiting (login, cadastro, IA, transações)
-- Dados isolados por usuário em todas as tabelas (FK + `user_id`)
-- Chave da IA apenas no `.env` (fora do Git, nunca exposta ao navegador)
-- Diretórios de backend inacessíveis pelo browser (`.htaccess` + `router.php`)
-
-## Estrutura
-
-```
-api/         Endpoints REST (auth, transactions, accounts, categories, goals, dashboard, ai)
-config/      Configuração geral e da IA (lida do .env)
-core/        Database (PDO), Auth, Validator, RateLimiter
-controllers/ PageController (rotas server-side)
-includes/    Bootstrap, Env (.env), helpers
-models/      User, Account, Category, Transaction, Goal, AiChat
-public/      Front controller + assets (css, js, img)
-scripts/     install.php (banco), screenshots.js (testes visuais)
-services/    AIService, AiAssistant, ContextBuilder, LocalNlu
-views/       Views PHP (layouts, auth, dashboard, transações, contas, categorias, metas, ai)
-```
-
-## Scripts de verificação
-
-Os scripts em `scripts/` e `tools/` automatizam auditorias visuais (screenshots,
-testes de fluxo, comparação de assets). Eles **não** carregam credenciais:
-a senha do usuário de teste vem do ambiente.
-
-```powershell
-$env:FINLIFE_TEST_PASSWORD = "<senha do usuário local de teste>"
-node scripts\screenshots.js
+```text
+api/             Endpoints HTTP/JSON (autenticação, finanças, cartões, mercados...)
+config/          Configurações da aplicação e do provedor de IA
+controllers/     Renderização server-side das páginas
+core/            Autenticação, banco, validação e rate limiting
+includes/        Bootstrap, leitura de ambiente e helpers
+models/          Regras de negócio e acesso aos dados
+services/        IA, contexto, processamento de linguagem e integração com provedores
+services/market/ Provedores, cache e normalização de dados de mercado
+public/          Front controller, CSS, JavaScript, fontes e imagens
+views/           Views PHP por área da aplicação
+scripts/         Instalação do banco e scripts de verificação
+database.sql     Schema completo, sem dados pessoais
 ```
 
-Sem a variável, o script encerra com uma mensagem explicativa — nunca tenta
-autenticar com um valor fixo.
+O fluxo principal é: **navegador → API/Controller → Model → MySQL**. As views carregam o shell da página; dados protegidos são obtidos por `fetch` nas APIs. Um autoloader simples evita dependências externas de PHP.
 
-## O que não entra no repositório
+## Banco de dados
 
-| Item | Motivo |
-|------|--------|
-| `.env` | Segredos de verdade: chave da IA e senha do banco |
-| `logs/*.log` | Log de execução do ambiente local |
-| `tools/ffmpeg/` | Binários de terceiros (ffmpeg/ffprobe, ~200 MB) |
-| `video-pitch*/` | Arquivos de produção do vídeo (áudio, captura, render) |
-| `.design-preview/` | Material de revisão visual |
+O arquivo [`database.sql`](database.sql) cria **31 tabelas** para usuários, contas, categorias, transações, metas, cartões, faturas, compromissos, conversas de IA, limites de requisição, dados de mercado e portfólio.
 
-O código-fonte, o schema do banco e a documentação **são** versionados.
+- relacionamentos usam chaves estrangeiras e `ON DELETE CASCADE` onde aplicável;
+- dados pessoais são isolados por `user_id`;
+- consultas de aplicação usam prepared statements;
+- cotações e históricos são cacheados no próprio MySQL;
+- o schema contém apenas estrutura: nenhum dado de usuário é versionado.
+
+O instalador executa o schema de forma idempotente:
+
+```bash
+php scripts/install.php
+```
+
+## Como executar
+
+### Requisitos
+
+- PHP 8.1 ou superior com `pdo_mysql`, `curl`, `mbstring` e `session`;
+- MySQL 5.7+/8 ou MariaDB compatível;
+- Apache do XAMPP ou o servidor embutido do PHP;
+- nenhuma dependência de frontend ou gerenciador de pacotes é necessária.
+
+### 1. Configurar o ambiente
+
+```bash
+cp .env.example .env
+```
+
+Edite `.env` com os dados do seu MySQL:
+
+```dotenv
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=finlife
+DB_USER=root
+DB_PASS=sua_senha_local
+```
+
+O `.env` está no `.gitignore`. A configuração da IA é opcional; sem `AI_API_KEY`, o assistente funciona no modo local.
+
+### 2. Criar o banco e as tabelas
+
+```bash
+php scripts/install.php
+```
+
+### 3. Iniciar a aplicação
+
+**Com XAMPP/Apache:**
+
+1. copie o projeto para `htdocs/FinLife`;
+2. ative Apache e MySQL;
+3. abra <http://localhost/FinLife/>.
+
+**Com o servidor embutido do PHP:**
+
+```bash
+php -S 127.0.0.1:8090 -t public router.php
+```
+
+Acesse <http://127.0.0.1:8090/> e crie uma conta em `/cadastro`.
+
+## Segurança aplicada
+
+- senhas com `password_hash()` e verificação/rehash de bcrypt;
+- sessão HttpOnly, SameSite, expiração por inatividade e regeneração de ID;
+- token CSRF em operações que alteram estado;
+- prepared statements e validação de entrada;
+- escape de saída HTML no servidor e no JavaScript;
+- rate limiting em autenticação, cadastro, IA, transações e mercado;
+- isolamento dos dados por usuário;
+- chaves de IA e credenciais mantidas no backend;
+- bloqueio de acesso direto a arquivos internos por `.htaccess` e `router.php`.
+
+## Aprendizados demonstrados
+
+- modelagem de dados relacionais e regras de negócio separadas das rotas;
+- construção de APIs HTTP/JSON consumidas por JavaScript;
+- autenticação, autorização por usuário e defesa contra erros comuns de segurança web;
+- integração com provedores externos, fallback, cache e transparência sobre a idade do dado;
+- organização de uma aplicação PHP sem framework e sem etapa de build.
+
+## Próximas melhorias
+
+- ampliar a suíte de testes automatizados e a cobertura de integração com o banco;
+- evoluir o instalador e as migrações para ambientes versionados;
+- revisar o módulo de mercados conforme os limites e termos de cada provedor;
+- incluir documentação de contrato da API e testes de contrato;
+- substituir gradualmente scripts auxiliares de auditoria por uma suíte de manutenção reproduzível.
+
+## Segurança e privacidade
+
+- `.env`, arquivos de log e dependências locais não devem ser versionados;
+- não use dados reais de clientes em commits, issues ou capturas de tela;
+- o repositório inclui apenas schema, código e documentação.
+
+---
+
+<div align="center">
+  <sub>Projeto de código aberto para demonstração de desenvolvimento web e boas práticas de segurança.</sub>
+</div>
