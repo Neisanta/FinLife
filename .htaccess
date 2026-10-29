@@ -1,0 +1,27 @@
+# ==============================================================
+# FinLife — .htaccess raiz (Apache / XAMPP)
+# Toda a aplicação pública vive em /public. Os diretórios de
+# backend (config, includes, models, services, controllers,
+# views, api, logs) NÃO são acessíveis diretamente pelo browser.
+# ==============================================================
+
+# Bloqueia acesso direto a arquivos sensíveis (inclui env.txt, o fallback
+# de hospedagens que ocultam dotfiles — qualquer "env.*" é protegido)
+<FilesMatch "^\.|^env\.|\.(env|sql|md|log|ini|lock|json)$">
+    Require all denied
+</FilesMatch>
+
+# Bloqueia acesso direto aos diretórios internos do backend
+RedirectMatch 404 ^(.*/)?(config|includes|core|models|services|controllers|views|logs|scripts|database\.sql)(/.*)?$
+
+Options -Indexes
+
+RewriteEngine On
+
+# Alias: /assets/* aponta para /public/assets/*
+RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
+# Front controller: tudo que não existir cai dentro de /public/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/$1 [L]

@@ -1,0 +1,29 @@
+# ==============================================================
+# FinLife — .htaccess raiz (Apache / cPanel)
+# Suba este arquivo na RAIZ (public_html) e renomeie para ".htaccess"
+# ==============================================================
+
+# Bloqueia acesso direto a arquivos sensíveis
+<FilesMatch "^\.|^env\.|\.(env|sql|md|log|ini|lock|json)$">
+    Require all denied
+</FilesMatch>
+
+# Bloqueia acesso direto aos diretórios internos do backend
+RedirectMatch 404 ^(.*/)?(config|includes|core|models|services|controllers|views|logs|scripts|database\.sql)(/.*)?$
+
+Options -Indexes
+
+RewriteEngine On
+
+# Alias: /assets/* aponta para /public/assets/*
+RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
+# Home: / vai direto para o index.php do app
+RewriteRule ^$ public/index.php [L]
+
+# Front controller: tudo que não existir cai dentro de /public/
+# (o guard de REQUEST_URI evita loop de redirecionamento)
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/$1 [L]

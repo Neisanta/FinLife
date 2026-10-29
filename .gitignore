@@ -1,0 +1,27 @@
+# Segredos — nunca versionar
+.env
+logs/*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependências
+node_modules/
+vendor/
+
+# Binários de terceiros (ffmpeg/ffprobe ~200 MB)
+tools/ffmpeg/
+
+# Produção do vídeo de apresentação (áudio, capturas e renders)
+video-pitch/
+video-pitch-v3/
+video-pitch-v4/
+
+# Material de revisão visual
+.design-preview/
+
+# Artefatos locais
+*.local
+*.bak

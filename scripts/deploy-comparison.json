@@ -1,0 +1,106 @@
+[
+ {
+  "file": "css/app.css",
+  "verdict": "DIFERENTE",
+  "localSize": 114826,
+  "remSize": 106249,
+  "localHash": "f5a8f475608c",
+  "remHash": "adbee99015bd"
+ },
+ {
+  "file": "js/app.js",
+  "verdict": "DIFERENTE",
+  "localSize": 31204,
+  "remSize": 29586,
+  "localHash": "6cb06a5f4e7c",
+  "remHash": "37253d84204c"
+ },
+ {
+  "file": "js/charts.js",
+  "verdict": "DIFERENTE",
+  "localSize": 25896,
+  "remSize": 25896,
+  "localHash": "520f08e69767",
+  "remHash": "0459e845414e"
+ },
+ {
+  "file": "js/market-charts.js",
+  "verdict": "DIFERENTE",
+  "localSize": 14567,
+  "remSize": 14567,
+  "localHash": "a30e44d39aec",
+  "remHash": "7d758f29a0ce"
+ },
+ {
+  "file": "js/pages/dashboard.js",
+  "verdict": "DIFERENTE",
+  "localSize": 16027,
+  "remSize": 13044,
+  "localHash": "693b0d5af757",
+  "remHash": "9ac0133c7788"
+ },
+ {
+  "file": "js/pages/transactions.js",
+  "verdict": "IGUAL",
+  "localSize": 12558,
+  "remSize": 12558,
+  "localHash": "0ab42cf0600a",
+  "remHash": "0ab42cf0600a"
+ },
+ {
+  "file": "js/pages/accounts.js",
+  "verdict": "IGUAL",
+  "localSize": 6992,
+  "remSize": 6992,
+  "localHash": "56754be1aec6",
+  "remHash": "56754be1aec6"
+ },
+ {
+  "file": "js/pages/cards.js",
+  "verdict": "IGUAL",
+  "localSize": 86745,
+  "remSize": 86745,
+  "localHash": "e61593a12f79",
+  "remHash": "e61593a12f79"
+ },
+ {
+  "file": "js/pages/markets.js",
+  "verdict": "DIFERENTE",
+  "localSize": 66220,
+  "remSize": 66220,
+  "localHash": "78887f70583f",
+  "remHash": "c7b9ea80529c"
+ },
+ {
+  "file": "js/pages/categories.js",
+  "verdict": "IGUAL",
+  "localSize": 5706,
+  "remSize": 5706,
+  "localHash": "b9b806a8db74",
+  "remHash": "b9b806a8db74"
+ },
+ {
+  "file": "js/pages/goals.js",
+  "verdict": "IGUAL",
+  "localSize": 12390,
+  "remSize": 12390,
+  "localHash": "46500c9648d5",
+  "remHash": "46500c9648d5"
+ },
+ {
+  "file": "js/pages/ai.js",
+  "verdict": "IGUAL",
+  "localSize": 13421,
+  "remSize": 13421,
+  "localHash": "e5dedacebde7",
+  "remHash": "e5dedacebde7"
+ },
+ {
+  "file": "js/pages/commitments.js",
+  "verdict": "AUSENTE NO SERVIDOR (404)",
+  "localSize": 33040,
+  "remSize": 0,
+  "localHash": "8ff68f13f68b",
+  "remHash": "—"
+ }
+]
